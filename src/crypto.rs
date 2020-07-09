@@ -1,7 +1,7 @@
 use core::mem;
 
-use rand_core::{RngCore, SeedableRng};
 use rand_chacha::ChaChaRng;
+use rand_core::{RngCore, SeedableRng};
 
 use sha2::{Digest, Sha256};
 
@@ -12,22 +12,19 @@ pub fn hash(data: &[u8]) -> [u8; HASH_SIZE] {
 }
 
 fn sha_256(data: &[u8]) -> [u8; HASH_SIZE] {
-
     let mut hasher = Sha256::new();
     hasher.update(data);
     let hash = hasher.finalize();
 
     let mut result = [0u8; HASH_SIZE];
     result.copy_from_slice(hash.as_slice());
-
     result
 }
 
 pub fn prng(seed: &[u8], entropy: &[u8], count: u32) -> [u8; 32] {
-
     let mut hasher = Sha256::new();
 
-// write input message
+    // write input message
     hasher.update(seed);
     hasher.update(entropy);
     let hash = hasher.finalize();

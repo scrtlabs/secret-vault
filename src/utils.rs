@@ -30,3 +30,12 @@ pub fn generate_key_id(env: &Env) -> String {
     let entropy = unsafe { mem::transmute::<u64, [u8; 8]>(env.block.height) };
     "key_".to_string() + &base64::encode(prng(env.message.sender.as_slice(), entropy.as_ref(), 0))
 }
+
+pub fn generate_private_key(env: &Env, seed: &[u8], entropy: &[u8]) -> [u8; 32] {
+    let height_slice = unsafe { mem::transmute::<u64, [u8; 8]>(env.block.height) };
+
+    let mut keying_material: Vec<u8> =   env.message.sender.as_slice().to_vec();
+    keying_material.extend_from_slice(height_slice.as_ref());
+    keying_material.extend_from_slice(entropy);
+    prng(seed, &keying_material, 0)
+}

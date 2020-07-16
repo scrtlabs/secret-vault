@@ -30,7 +30,7 @@ Choose a random phrase, or a long string of random data. Either way, the PRNG de
 ### Generate a new key
 ```./secretcli tx compute execute <contract_address> "{\"NewKey\": {\"key_seed\": \"XxT/TGEb1U+bMKM7/9qz87JKpd6xj+0URYVySL9vEHs=\", \"passphrase\": \"yo\"}}"```
 
-`key_seed` should be a base64 encoded string of random bytes - as above this will be used in generating your private key
+`key_seed` should be a base64 encoded string of random bytes - this will be used in generating your private key
 
 Check the return value of this transaction to get your api_key and the key_id (key identifier) for the newly created key. You will need the key_id, api_key and your passphrase to be able to sign data in the next step
 

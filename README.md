@@ -17,3 +17,24 @@ What isn't there to see here?
 * No deletion of keys or changing of passwords (though this would be pretty easy)
 
 * Using the private keys for anything other than signing with secp256k1 (encryption, ed25519, nist etc.)
+
+# Example usage
+
+### Initialize the contract
+
+```./secretcli tx compute instantiate "<code_id>" "{\"Init\": {\"seed_phrase\": \"hello\"}}" --label <label_name>```
+
+Choose a random phrase, or a long string of random data. Either way, the PRNG depends on this so make it good
+
+
+### Generate a new key
+```./secretcli tx compute execute <contract_address> "{\"NewKey\": {\"key_seed\": \"XxT/TGEb1U+bMKM7/9qz87JKpd6xj+0URYVySL9vEHs=\", \"passphrase\": \"yo\"}}"```
+
+`key_seed` should be a base64 encoded string of random bytes - as above this will be used in generating your private key
+
+Check the return value of this transaction to get your api_key and the key_id (key identifier) for the newly created key. You will need the key_id, api_key and your passphrase to be able to sign data in the next step
+
+### Sign some data
+```./secretcli tx compute execute secret1l425neayde0fzfcv3apkyk4zqagvflm6u6e56s "{\"Sign\": {\"passphrase\": \"<your_passphrase>\", \"key_id\":\"<your_key_id>\", \"data\": \"XxT/TGEb1U+bMKM7/9qz87JKpd6xj+0URYVySL9vEHs=\", \"api_key\": \"<your_api_key>\"}}"```
+
+`data` is a base64 encoded string of data exactly 32 bytes long. So make sure you hash your data before sending it. This is done to avoid having to guess how you want your data processed before signing and keeping gas costs down

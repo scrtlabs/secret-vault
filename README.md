@@ -12,7 +12,7 @@ What is there to see here?
 
 What isn't there to see here?
 
-* Properly auditing cryptographic anything (no constant time functions, no cryptanalysis, etc.)
+* Properly audited cryptographic anything (no constant time functions, no cryptanalysis, etc.)
 
 * No deletion of keys or changing of passwords (though this would be pretty easy)
 

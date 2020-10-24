@@ -1,4 +1,4 @@
-use cosmwasm_std::{log, HandleResponse, Never};
+use cosmwasm_std::{log, HandleResponse};
 
 use hex;
 
@@ -15,7 +15,7 @@ pub struct SignResponse {
 }
 
 impl Into<HandleResponse> for SignResponse {
-    fn into(self) -> HandleResponse<Never> {
+    fn into(self) -> HandleResponse {
         let sig = hex::encode(self.signature.as_ref());
 
         HandleResponse {
@@ -27,7 +27,7 @@ impl Into<HandleResponse> for SignResponse {
 }
 
 impl Into<HandleResponse> for CreateKeyResponse {
-    fn into(self) -> HandleResponse<Never> {
+    fn into(self) -> HandleResponse {
         let pubkey = hex::encode(self.public_key.as_ref());
 
         HandleResponse {

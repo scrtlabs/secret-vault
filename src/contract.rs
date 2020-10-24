@@ -1,5 +1,5 @@
 use cosmwasm_std::{
-    generic_err, Api, Binary, Env, Extern, HandleResponse, InitResponse, MigrateResponse, Querier,
+    Api, Binary, Env, Extern, HandleResponse, InitResponse, MigrateResponse, Querier,
     StdError, StdResult, Storage,
 };
 
@@ -107,7 +107,7 @@ pub fn query<S: Storage, A: Api, Q: Querier>(
     _deps: &Extern<S, A, Q>,
     _msg: QueryMsg,
 ) -> StdResult<Binary> {
-    Err(generic_err("Queries are not supported yet:)"))
+    Err(StdError::generic_err("Queries are not supported yet:)"))
 }
 
 /////////////////////////////// Migrate ///////////////////////////////
@@ -120,7 +120,7 @@ pub fn migrate<S: Storage, A: Api, Q: Querier>(
     _env: Env,
     _msg: MigrateMsg,
 ) -> StdResult<MigrateResponse> {
-    Err(generic_err("You can only use this contract for migrations"))
+    Err(StdError::generic_err("You can only use this contract for migrations"))
 }
 
 #[cfg(test)]

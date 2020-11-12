@@ -2,15 +2,10 @@ use core::mem;
 
 use rand_chacha::ChaChaRng;
 use rand_core::{RngCore, SeedableRng};
-use secret_toolkit::crypto::{sha_256};
 
 use sha2::{Digest, Sha256};
 
 pub const HASH_SIZE: usize = 32;
-
-pub fn hash(data: &[u8]) -> [u8; HASH_SIZE] {
-    sha_256(data)
-}
 
 pub fn prng(seed: &[u8], entropy: &[u8], count: u32) -> [u8; 32] {
     let mut hasher = Sha256::new();

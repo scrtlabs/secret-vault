@@ -392,7 +392,7 @@ dependencies = [
 [[package]]
 name = "secret-toolkit"
 version = "0.1.0"
-source = "git+https://github.com/enigmampc/secret-toolkit?rev=444d918#444d91818411a908425ef3bbf3e0051920b4ce48"
+source = "git+https://github.com/enigmampc/secret-toolkit?rev=a9f87d4#a9f87d4fa7d21c296a0f0e3446b7fa949f2dee0e"
 dependencies = [
  "secret-toolkit-crypto",
  "secret-toolkit-serialization",
@@ -403,7 +403,7 @@ dependencies = [
 [[package]]
 name = "secret-toolkit-crypto"
 version = "0.1.0"
-source = "git+https://github.com/enigmampc/secret-toolkit?rev=444d918#444d91818411a908425ef3bbf3e0051920b4ce48"
+source = "git+https://github.com/enigmampc/secret-toolkit?rev=a9f87d4#a9f87d4fa7d21c296a0f0e3446b7fa949f2dee0e"
 dependencies = [
  "cosmwasm-std",
  "libsecp256k1",
@@ -415,7 +415,7 @@ dependencies = [
 [[package]]
 name = "secret-toolkit-serialization"
 version = "0.1.0"
-source = "git+https://github.com/enigmampc/secret-toolkit?rev=444d918#444d91818411a908425ef3bbf3e0051920b4ce48"
+source = "git+https://github.com/enigmampc/secret-toolkit?rev=a9f87d4#a9f87d4fa7d21c296a0f0e3446b7fa949f2dee0e"
 dependencies = [
  "bincode2",
  "cosmwasm-std",
@@ -425,7 +425,7 @@ dependencies = [
 [[package]]
 name = "secret-toolkit-storage"
 version = "0.1.0"
-source = "git+https://github.com/enigmampc/secret-toolkit?rev=444d918#444d91818411a908425ef3bbf3e0051920b4ce48"
+source = "git+https://github.com/enigmampc/secret-toolkit?rev=a9f87d4#a9f87d4fa7d21c296a0f0e3446b7fa949f2dee0e"
 dependencies = [
  "cosmwasm-std",
  "cosmwasm-storage",
@@ -436,7 +436,7 @@ dependencies = [
 [[package]]
 name = "secret-toolkit-utils"
 version = "0.1.0"
-source = "git+https://github.com/enigmampc/secret-toolkit?rev=444d918#444d91818411a908425ef3bbf3e0051920b4ce48"
+source = "git+https://github.com/enigmampc/secret-toolkit?rev=a9f87d4#a9f87d4fa7d21c296a0f0e3446b7fa949f2dee0e"
 dependencies = [
  "cosmwasm-std",
  "schemars",

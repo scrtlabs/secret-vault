@@ -17,76 +17,76 @@
 //!      });
 //! 4. Anywhere you see query(&deps, ...) you must replace it with query(&mut deps, ...)
 
-// use cosmwasm_std::{coins, from_binary, HandleResponse, HandleResult, InitResponse, StdError};
-// use cosmwasm_std::testing::{handle, init, mock_env, mock_instance, query};
+use cosmwasm_std::{coins, from_binary, HandleResponse, HandleResult, InitResponse, StdError};
+use cosmwasm_std::testing::{handle, init, mock_env, mock_instance, query};
 
-// use secret_vault::msg::{CountResponse, HandleMsg, InitMsg, QueryMsg};
+use secret_vault::msg::{CountResponse, HandleMsg, InitMsg, QueryMsg};
 
-// // This line will test the output of cargo wasm
-// static WASM: &[u8] = include_bytes!("../target/wasm32-unknown-unknown/release/secret_vault.wasm");
-// // You can uncomment this line instead to test productionified build from rust-optimizer
-// // static WASM: &[u8] = include_bytes!("../contract.wasm");
+// This line will test the output of cargo wasm
+static WASM: &[u8] = include_bytes!("../target/wasm32-unknown-unknown/release/secret_vault.wasm");
+// You can uncomment this line instead to test productionified build from rust-optimizer
+// static WASM: &[u8] = include_bytes!("../contract.wasm");
 
-// #[test]
-// fn proper_initialization() {
-// let mut deps = mock_instance(WASM, &[]);
+#[test]
+fn proper_initialization() {
+let mut deps = mock_instance(WASM, &[]);
 
-// let msg = InitMsg::Init{ count: 17 };
-// let env = mock_env("creator", &coins(1000, "earth"));
+let msg = InitMsg::Init{ count: 17 };
+let env = mock_env("creator", &coins(1000, "earth"));
 
-// // we can just call .unwrap() to assert this was a success
-// let res: InitResponse = init(&mut deps, env, msg).unwrap();
-// assert_eq!(res.messages.len(), 0);
+// we can just call .unwrap() to assert this was a success
+let res: InitResponse = init(&mut deps, env, msg).unwrap();
+assert_eq!(res.messages.len(), 0);
 
-// // it worked, let's query the state
-// let res = query(&mut deps, QueryMsg::GetCount {}).unwrap();
-// let value: CountResponse = from_binary(&res).unwrap();
-// assert_eq!(value.count, 17);
-// }
+// it worked, let's query the state
+let res = query(&mut deps, QueryMsg::GetCount {}).unwrap();
+let value: CountResponse = from_binary(&res).unwrap();
+assert_eq!(value.count, 17);
+}
 
-// #[test]
-// fn increment() {
-// let mut deps = mock_instance(WASM, &coins(2, "token"));
+#[test]
+fn increment() {
+let mut deps = mock_instance(WASM, &coins(2, "token"));
 
-// let msg = InitMsg { count: 17 };
-// let env = mock_env("creator", &coins(2, "token"));
-// let _res: InitResponse = init(&mut deps, env, msg).unwrap();
+let msg = InitMsg { count: 17 };
+let env = mock_env("creator", &coins(2, "token"));
+let _res: InitResponse = init(&mut deps, env, msg).unwrap();
 
-// // beneficiary can release it
-// let env = mock_env("anyone", &coins(2, "token"));
-// let msg = HandleMsg::Increment {};
-// let _res: HandleResponse = handle(&mut deps, env, msg).unwrap();
+// beneficiary can release it
+let env = mock_env("anyone", &coins(2, "token"));
+let msg = HandleMsg::Increment {};
+let _res: HandleResponse = handle(&mut deps, env, msg).unwrap();
 
-// // should increase counter by 1
-// let res = query(&mut deps, QueryMsg::GetCount {}).unwrap();
-// let value: CountResponse = from_binary(&res).unwrap();
-// assert_eq!(value.count, 18);
-// }
+// should increase counter by 1
+let res = query(&mut deps, QueryMsg::GetCount {}).unwrap();
+let value: CountResponse = from_binary(&res).unwrap();
+assert_eq!(value.count, 18);
+}
 
-// #[test]
-// fn reset() {
-// let mut deps = mock_instance(WASM, &coins(2, "token"));
+#[test]
+fn reset() {
+let mut deps = mock_instance(WASM, &coins(2, "token"));
 
-// let msg = InitMsg { count: 17 };
-// let env = mock_env(&deps.api, "creator", &coins(2, "token"));
-// let _res: InitResponse = init(&mut deps, env, msg).unwrap();
+let msg = InitMsg { count: 17 };
+let env = mock_env(&deps.api, "creator", &coins(2, "token"));
+let _res: InitResponse = init(&mut deps, env, msg).unwrap();
 
-// // beneficiary can release it
-// let unauth_env = mock_env(&deps.api, "anyone", &coins(2, "token"));
-// let msg = HandleMsg::Reset { count: 5 };
-// let res: HandleResult = handle(&mut deps, unauth_env, msg);
-// match res.unwrap_err() {
-// StdError::Unauthorized { .. } => {}
-// _ => panic!("Expected unauthorized"),
-// }
+// beneficiary can release it
+let unauth_env = mock_env(&deps.api, "anyone", &coins(2, "token"));
+let msg = HandleMsg::Reset { count: 5 };
+let res: HandleResult = handle(&mut deps, unauth_env, msg);
+match res.unwrap_err() {
+StdError::Unauthorized { .. } => {}
+_ => panic!("Expected unauthorized"),
+}
 
-// // only the original creator can reset the counter
-// let auth_env = mock_env(&deps.api, "creator", &coins(2, "token"));
-// let msg = HandleMsg::Reset { count: 5 };
-// let _res: HandleResponse = handle(&mut deps, auth_env, msg).unwrap();
+// only the original creator can reset the counter
+let auth_env = mock_env(&deps.api, "creator", &coins(2, "token"));
+let msg = HandleMsg::Reset { count: 5 };
+let _res: HandleResponse = handle(&mut deps, auth_env, msg).unwrap();
 
-// // should now be 5
-// let res = query(&mut deps, QueryMsg::GetCount {}).unwrap();
-// let value: CountResponse = from_binary(&res).unwrap();
-// assert_eq!(value.count, 5);
-// }
+// should now be 5
+let res = query(&mut deps, QueryMsg::GetCount {}).unwrap();
+let value: CountResponse = from_binary(&res).unwrap();
+assert_eq!(value.count, 5);
+}

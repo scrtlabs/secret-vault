@@ -9,8 +9,8 @@ pub fn generate_api_key(seed: &[u8], env: &Env) -> String {
 
     let mut entropy: Vec<u8> = env.message.sender.0.as_bytes().to_vec();
     entropy.extend_from_slice(height_slice.as_ref());
-    
-   let mut rng = Prng::new(seed, &entropy);
+
+    let mut rng = Prng::new(seed, &entropy);
     rng.set_word_pos((SHA256_HASH_SIZE / 2) as u32);
     "api_key_".to_string() + &base64::encode(rng.rand_bytes())
 }
@@ -45,7 +45,7 @@ pub fn generate_private_key(env: &Env, seed: &[u8], entropy: &[u8]) -> [u8; 32] 
     let mut keying_material: Vec<u8> = env.message.sender.0.as_bytes().to_vec();
     keying_material.extend_from_slice(height_slice.as_ref());
     keying_material.extend_from_slice(entropy);
-   
+
     let mut rng = Prng::new(seed, &keying_material);
     rng.set_word_pos(0);
     rng.rand_bytes()

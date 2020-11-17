@@ -1,5 +1,4 @@
 pub mod contract;
-mod crypto;
 pub mod msg;
 mod responses;
 mod sign;

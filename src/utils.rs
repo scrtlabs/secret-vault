@@ -1,8 +1,7 @@
 use core::mem;
 use cosmwasm_std::Env;
-use secret_toolkit::crypto::{sha_256, Prng};
+use secret_toolkit::crypto::{sha_256, Prng, SHA256_HASH_SIZE};
 
-use crate::crypto::{HASH_SIZE};
 use crate::state::PrivateKeyRecord;
 
 pub fn generate_api_key(seed: &[u8], env: &Env) -> String {
@@ -12,7 +11,7 @@ pub fn generate_api_key(seed: &[u8], env: &Env) -> String {
     entropy.extend_from_slice(height_slice.as_ref());
     
    let mut rng = Prng::new(seed, &entropy);
-    rng.set_word_pos((HASH_SIZE / 2) as u32);
+    rng.set_word_pos((SHA256_HASH_SIZE / 2) as u32);
     "api_key_".to_string() + &base64::encode(rng.rand_bytes())
 }
 
@@ -25,7 +24,7 @@ pub fn authenticate_request(
 }
 
 pub fn validate_data_len(data: &[u8]) -> bool {
-    data.len() == HASH_SIZE
+    data.len() == SHA256_HASH_SIZE
 }
 
 pub fn generate_seed(keying_material: &String) -> [u8; 32] {

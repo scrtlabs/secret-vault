@@ -1,9 +1,8 @@
 use cosmwasm_std::{
-    Api, Binary, Env, Extern, HandleResponse, InitResponse, MigrateResponse, Querier,
-    StdError, StdResult, Storage,
+    Api, Binary, Env, Extern, HandleResponse, InitResponse, MigrateResponse, Querier, StdError,
+    StdResult, Storage,
 };
 
-use crate::crypto::prng;
 use crate::msg::{HandleMsg, InitMsg, MigrateMsg, QueryMsg};
 use crate::responses::{CreateKeyResponse, SignResponse};
 use crate::sign::{pubkey, sign};
@@ -120,22 +119,27 @@ pub fn migrate<S: Storage, A: Api, Q: Querier>(
     _env: Env,
     _msg: MigrateMsg,
 ) -> StdResult<MigrateResponse> {
-    Err(StdError::generic_err("You can only use this contract for migrations"))
+    Err(StdError::generic_err(
+        "You can only use this contract for migrations",
+    ))
 }
 
 #[cfg(test)]
 mod tests {
-    use cosmwasm_std::testing::{mock_dependencies, mock_env, MOCK_CONTRACT_ADDR};
-    use cosmwasm_std::{coins, HumanAddr, ReadonlyStorage, StdError};
+    use cosmwasm_std::coins;
+    use cosmwasm_std::testing::{mock_dependencies, mock_env};
 
     use super::*;
+    use crate::msg::{HandleMsg, InitMsg};
 
     #[test]
     fn init_test() {
         let mut deps = mock_dependencies(20, &[]);
 
-        let msg = InitMsg {};
-        let env = mock_env(&deps.api, "creator", &coins(1000, "earth"));
+        let msg = InitMsg::Init {
+            seed_phrase: "test".to_string(),
+        };
+        let env = mock_env("creator", &coins(1000, "earth"));
         // we can just call .unwrap() to assert this was a success
         let res = init(&mut deps, env, msg);
         match res.unwrap() {
@@ -147,13 +151,23 @@ mod tests {
     fn addition_test() {
         let mut deps = mock_dependencies(20, &[]);
 
-        let msg = HandleMsg { a: 10, b: 20 };
-        let env = mock_env(&deps.api, "creator", &coins(1000, "earth"));
+        let msg = InitMsg::Init {
+            seed_phrase: "test".to_string(),
+        };
+        let env = mock_env("creator", &coins(1000, "earth"));
+        // we can just call .unwrap() to assert this was a success
+        let res = init(&mut deps, env, msg);
+        match res.unwrap() {
+            InitResponse => {}
+        }
+
+        let msg = HandleMsg::NewKey {
+            key_seed: "test".to_string(),
+            passphrase: "test".to_string(),
+        };
+        let env = mock_env("creator", &coins(1000, "earth"));
         // we can just call .unwrap() to assert this was a success
         let res = handle(&mut deps, env, msg);
-        match res {
-            Ok(resp) => println!(resp),
-            _ => assert_eq!(0, 1),
-        }
+        println!("{:?}", res.unwrap());
     }
 }

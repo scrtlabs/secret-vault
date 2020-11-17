@@ -17,8 +17,8 @@
 //!      });
 //! 4. Anywhere you see query(&deps, ...) you must replace it with query(&mut deps, ...)
 
+use cosmwasm_std::testing::{handle, init, mock_env, mock_instance, query};
 use cosmwasm_std::{coins, from_binary, HandleResponse, HandleResult, InitResponse, StdError};
-use cosmwasm_vm::testing::{handle, init, mock_env, mock_instance, query};
 
 use secret_vault::msg::{CountResponse, HandleMsg, InitMsg, QueryMsg};
 
@@ -31,8 +31,8 @@ static WASM: &[u8] = include_bytes!("../target/wasm32-unknown-unknown/release/se
 fn proper_initialization() {
     let mut deps = mock_instance(WASM, &[]);
 
-    let msg = InitMsg { count: 17 };
-    let env = mock_env(&deps.api, "creator", &coins(1000, "earth"));
+    let msg = InitMsg::Init { count: 17 };
+    let env = mock_env("creator", &coins(1000, "earth"));
 
     // we can just call .unwrap() to assert this was a success
     let res: InitResponse = init(&mut deps, env, msg).unwrap();
@@ -49,11 +49,11 @@ fn increment() {
     let mut deps = mock_instance(WASM, &coins(2, "token"));
 
     let msg = InitMsg { count: 17 };
-    let env = mock_env(&deps.api, "creator", &coins(2, "token"));
+    let env = mock_env("creator", &coins(2, "token"));
     let _res: InitResponse = init(&mut deps, env, msg).unwrap();
 
     // beneficiary can release it
-    let env = mock_env(&deps.api, "anyone", &coins(2, "token"));
+    let env = mock_env("anyone", &coins(2, "token"));
     let msg = HandleMsg::Increment {};
     let _res: HandleResponse = handle(&mut deps, env, msg).unwrap();
 

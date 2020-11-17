@@ -12,7 +12,7 @@ pub fn generate_api_key(seed: &[u8], env: &Env) -> String {
 
     let mut rng = Prng::new(seed, &entropy);
     rng.set_word_pos((SHA256_HASH_SIZE / 2) as u32);
-    "api_key_".to_string() + &base64::encode(rng.rand_bytes())
+    format!("api_key_{}", base64::encode(rng.rand_bytes()))
 }
 
 pub fn authenticate_request(
@@ -36,7 +36,7 @@ pub fn generate_key_id(env: &Env) -> String {
 
     let mut rng = Prng::new(env.message.sender.0.as_bytes(), entropy.as_ref());
     rng.set_word_pos(0);
-    "key_".to_string() + &base64::encode(rng.rand_bytes())
+    format!("key_{}", base64::encode(rng.rand_bytes()))
 }
 
 pub fn generate_private_key(env: &Env, seed: &[u8], entropy: &[u8]) -> [u8; 32] {

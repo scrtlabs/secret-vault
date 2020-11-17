@@ -168,9 +168,6 @@ mod tests {
         let env = mock_env("creator", &coins(1000, "earth"));
         // we can just call .unwrap() to assert this was a success
         let res = handle(&mut deps, env, msg);
-        match res {
-            Ok(resp) => println!("{:?}", resp),
-            Err(err) => println!("{}", err),
-        }
+        println!("{:?}", res.unwrap());
     }
 }

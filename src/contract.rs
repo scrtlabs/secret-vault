@@ -142,9 +142,7 @@ mod tests {
         let env = mock_env("creator", &coins(1000, "earth"));
         // we can just call .unwrap() to assert this was a success
         let res = init(&mut deps, env, msg);
-        match res.unwrap() {
-            InitResponse => {}
-        }
+        println!("{:?}", res.unwrap()); 
     }
 
     #[test]
@@ -157,9 +155,7 @@ mod tests {
         let env = mock_env("creator", &coins(1000, "earth"));
         // we can just call .unwrap() to assert this was a success
         let res = init(&mut deps, env, msg);
-        match res.unwrap() {
-            InitResponse => {}
-        }
+        println!("{:?}", res.unwrap());
 
         let msg = HandleMsg::NewKey {
             key_seed: "test".to_string(),

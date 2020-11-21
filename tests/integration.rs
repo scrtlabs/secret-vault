@@ -17,10 +17,10 @@
 //!      });
 //! 4. Anywhere you see query(&deps, ...) you must replace it with query(&mut deps, ...)
 
-use cosmwasm_std::testing::{mock_env, mock_dependencies};
+use cosmwasm_std::testing::{mock_dependencies, mock_env};
 use cosmwasm_std::{coins, HandleResponse};
 
-use secret_vault::contract::{init, handle};
+use secret_vault::contract::{handle, init};
 use secret_vault::msg::{HandleMsg, InitMsg};
 
 // This line will test the output of cargo wasm
@@ -58,8 +58,8 @@ fn init_sign() {
         Some(d) => d,
         None => panic!("No key id detected"),
     };
-   
-    let msg = HandleMsg::Sign{
+
+    let msg = HandleMsg::Sign {
         passphrase: passphrase.to_string(),
         api_key: api_key,
         key_id: key_id,

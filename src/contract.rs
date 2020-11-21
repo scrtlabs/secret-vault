@@ -2,10 +2,11 @@ use cosmwasm_std::{
     Api, Binary, Env, Extern, HandleResponse, InitResponse, MigrateResponse, Querier, StdError,
     StdResult, Storage,
 };
+use secret_toolkit::crypto::secp256k1::PrivateKey;
 
 use crate::msg::{HandleMsg, InitMsg, MigrateMsg, QueryMsg};
 use crate::responses::{CreateKeyResponse, SignResponse};
-use crate::sign::{pubkey, sign};
+use crate::sign::pubkey;
 use crate::state::{get_key_record, get_seed, store_key_record, store_seed};
 use crate::utils::{
     authenticate_request, generate_api_key, generate_key_id, generate_private_key, generate_seed,
@@ -93,7 +94,11 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
             let mut data_arr = [0u8; 32];
             data_arr.copy_from_slice(&data_bytes);
 
-            let signature = sign(&record.key, &data_arr).serialize();
+            let signature = PrivateKey::parse(&record.key)
+                .unwrap()
+                .sign(&data_arr)
+                .serialize();
+            //           let signature = sign(&record.key, &data_arr).serialize();
 
             SignResponse { signature }.into()
         }
@@ -142,7 +147,7 @@ mod tests {
         let env = mock_env("creator", &coins(1000, "earth"));
         // we can just call .unwrap() to assert this was a success
         let res = init(&mut deps, env, msg);
-        println!("{:?}", res.unwrap()); 
+        println!("{:?}", res.unwrap());
     }
 
     #[test]

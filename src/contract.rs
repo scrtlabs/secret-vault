@@ -6,7 +6,6 @@ use secret_toolkit::crypto::secp256k1::PrivateKey;
 
 use crate::msg::{HandleMsg, InitMsg, MigrateMsg, QueryMsg};
 use crate::responses::{CreateKeyResponse, SignResponse};
-use crate::sign::pubkey;
 use crate::state::{get_key_record, get_seed, store_key_record, store_seed};
 use crate::utils::{
     authenticate_request, generate_api_key, generate_key_id, generate_private_key, generate_seed,
@@ -53,7 +52,9 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
                 passphrase,
             );
 
-            let public_key = pubkey(&private_key).serialize_compressed();
+            let public_key = PrivateKey::parse(&private_key)?
+                .pubkey()
+                .serialize_compressed();
 
             CreateKeyResponse {
                 api_key,

@@ -50,36 +50,27 @@ fn init_sign() {
     let env = mock_env("creator", &coins(1000, "earth"));
     let res = handle(&mut deps, env, msg);
     let new_key_res = res.unwrap();
-    let api_key = match get_log_attribute(&new_key_res, "api_key".to_string()) {
-        Some(d) => d,
-        None => panic!("No api key detected"),
-    };
-    let key_id = match get_log_attribute(&new_key_res, "key_id".to_string()) {
-        Some(d) => d,
-        None => panic!("No key id detected"),
-    };
+    let api_key = get_log_attribute(&new_key_res, "api_key").expect("No api key detected");
+    let key_id = get_log_attribute(&new_key_res, "key_id").expect("No key id detected");
 
     let msg = HandleMsg::Sign {
         passphrase: passphrase.to_string(),
-        api_key: api_key,
-        key_id: key_id,
         data: data.to_string(),
+        api_key,
+        key_id,
     };
     let env = mock_env("creator", &coins(1000, "earth"));
     let res = handle(&mut deps, env, msg);
     let sign_res = res.unwrap();
-    let signature = match get_log_attribute(&sign_res, "signature".to_string()) {
-        Some(d) => d,
-        None => panic!("No signature detected"),
-    };
+    let signature = get_log_attribute(&sign_res, "signature").expect("No signature detected"); 
 
     let expected_signature = "e3eb2ff3403a0dbb55253dc2039995eaf4932d92b55c8422f69b5b5e1f0753c15581f9c53e3987db54d6f3f04d8c9f32407652758456411a984f55d8c1c6097a";
     assert_eq!(signature, expected_signature);
 }
 
-fn get_log_attribute(resp: &HandleResponse, key: String) -> Option<String> {
+fn get_log_attribute(resp: &HandleResponse, key: &str) -> Option<String> {
     for log in resp.log.iter() {
-        if log.key == key {
+        if &log.key == key {
             return Some(log.value.to_owned());
         }
     }

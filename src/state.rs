@@ -20,10 +20,10 @@ pub fn get_seed<S: Storage>(storage: &mut S) -> Vec<u8> {
 
 pub fn store_key_record<S: Storage>(
     storage: &mut S,
-    key_id: &str,
+    key_id: String,
     private_key: [u8; 32],
-    api_key: &str,
-    passphrase: &str,
+    api_key: String,
+    passphrase: String,
 ) {
     let record = PrivateKeyRecord {
         api_key: api_key.to_string(),

@@ -1,7 +1,5 @@
 use cosmwasm_std::{log, HandleResponse};
 
-use hex;
-
 #[derive(Clone)]
 pub struct CreateKeyResponse {
     pub key_id: String,

@@ -1,7 +1,7 @@
 use cosmwasm_std::{StdError, StdResult, Storage};
 use serde::{Deserialize, Serialize};
 
-pub const SEED_KEY: &[u8] = "seed".as_bytes();
+pub const SEED_KEY: &[u8] = b"seed";
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct PrivateKeyRecord {
@@ -20,14 +20,14 @@ pub fn get_seed<S: Storage>(storage: &mut S) -> Vec<u8> {
 
 pub fn store_key_record<S: Storage>(
     storage: &mut S,
-    key_id: &String,
+    key_id: &str,
     private_key: [u8; 32],
-    api_key: &String,
-    passphrase: &String,
+    api_key: &str,
+    passphrase: &str,
 ) {
     let record = PrivateKeyRecord {
-        api_key: api_key.clone(),
-        passphrase: passphrase.clone(),
+        api_key: api_key.to_string(),
+        passphrase: passphrase.to_string(),
         key: private_key,
     };
 
@@ -36,7 +36,7 @@ pub fn store_key_record<S: Storage>(
     storage.set(&key_id.as_bytes(), record_bytes.as_slice());
 }
 
-pub fn get_key_record<S: Storage>(storage: &mut S, key_id: &String) -> StdResult<PrivateKeyRecord> {
+pub fn get_key_record<S: Storage>(storage: &mut S, key_id: &str) -> StdResult<PrivateKeyRecord> {
     if let Some(record_bytes) = storage.get(&key_id.as_bytes()) {
         let record: PrivateKeyRecord = bincode2::deserialize(&record_bytes).unwrap();
         Ok(record)

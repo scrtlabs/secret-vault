@@ -50,7 +50,7 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
                 key_id.to_string(),
                 private_key,
                 api_key.to_string(),
-                passphrase.to_string(),
+                passphrase,
             );
 
             let public_key = pubkey(&private_key).serialize_compressed();
@@ -94,9 +94,7 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
             let mut data_arr = [0u8; 32];
             data_arr.copy_from_slice(&data_bytes);
 
-            let signature = PrivateKey::parse(&record.key)?
-                .sign(&data_arr)
-                .serialize();
+            let signature = PrivateKey::parse(&record.key)?.sign(&data_arr).serialize();
 
             SignResponse { signature }.into()
         }

@@ -62,7 +62,7 @@ fn init_sign() {
     let env = mock_env("creator", &coins(1000, "earth"));
     let res = handle(&mut deps, env, msg);
     let sign_res = res.unwrap();
-    let signature = get_log_attribute(&sign_res, "signature").expect("No signature detected"); 
+    let signature = get_log_attribute(&sign_res, "signature").expect("No signature detected");
 
     let expected_signature = "e3eb2ff3403a0dbb55253dc2039995eaf4932d92b55c8422f69b5b5e1f0753c15581f9c53e3987db54d6f3f04d8c9f32407652758456411a984f55d8c1c6097a";
     assert_eq!(signature, expected_signature);

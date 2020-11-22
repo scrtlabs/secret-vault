@@ -26,8 +26,8 @@ pub fn store_key_record<S: Storage>(
     passphrase: String,
 ) {
     let record = PrivateKeyRecord {
-        api_key: api_key.to_string(),
-        passphrase: passphrase.to_string(),
+        api_key,
+        passphrase,
         key: private_key,
     };
 

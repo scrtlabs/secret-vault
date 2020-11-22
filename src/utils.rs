@@ -15,19 +15,15 @@ pub fn generate_api_key(seed: &[u8], env: &Env) -> String {
     format!("api_key_{}", base64::encode(rng.rand_bytes()))
 }
 
-pub fn authenticate_request(
-    record: &PrivateKeyRecord,
-    api_key: &String,
-    passphrase: &String,
-) -> bool {
-    return &record.api_key == api_key && &record.passphrase == passphrase;
+pub fn authenticate_request(record: &PrivateKeyRecord, api_key: &str, passphrase: &str) -> bool {
+    record.api_key == api_key && record.passphrase == passphrase
 }
 
 pub fn validate_data_len(data: &[u8]) -> bool {
     data.len() == SHA256_HASH_SIZE
 }
 
-pub fn generate_seed(keying_material: &String) -> [u8; 32] {
+pub fn generate_seed(keying_material: &str) -> [u8; 32] {
     sha_256(&keying_material.as_bytes())
 }
 

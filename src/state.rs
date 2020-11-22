@@ -20,7 +20,7 @@ pub fn get_seed<S: Storage>(storage: &mut S) -> Vec<u8> {
 
 pub fn store_key_record<S: Storage>(
     storage: &mut S,
-    key_id: String,
+    key_id: &str,
     private_key: [u8; 32],
     api_key: String,
     passphrase: String,
@@ -33,7 +33,7 @@ pub fn store_key_record<S: Storage>(
 
     let record_bytes: Vec<u8> = bincode2::serialize(&record).unwrap();
 
-    storage.set(&key_id.as_bytes(), record_bytes.as_slice());
+    storage.set(key_id.as_bytes(), record_bytes.as_slice());
 }
 
 pub fn get_key_record<S: Storage>(storage: &mut S, key_id: &str) -> StdResult<PrivateKeyRecord> {
@@ -41,9 +41,6 @@ pub fn get_key_record<S: Storage>(storage: &mut S, key_id: &str) -> StdResult<Pr
         let record: PrivateKeyRecord = bincode2::deserialize(&record_bytes).unwrap();
         Ok(record)
     } else {
-        Err(StdError::GenericErr {
-            msg: "Key ID not found".to_string(),
-            backtrace: None,
-        })
+        Err(StdError::generic_err("Key ID not found"))
     }
 }

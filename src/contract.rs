@@ -41,15 +41,15 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
 
             let key_id = generate_key_id(&env);
 
-            let api_key: String = generate_api_key(&seed, &env);
+            let api_key = generate_api_key(&seed, &env);
 
             let private_key = generate_private_key(&env, &seed, &key_seed.into_bytes());
 
             store_key_record(
                 &mut (deps.storage),
-                key_id.to_string(),
+                &key_id,
                 private_key,
-                api_key.to_string(),
+                api_key.clone(),
                 passphrase,
             );
 
@@ -73,22 +73,19 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
             let record = get_key_record(&mut (deps.storage), &key_id)?;
 
             if !authenticate_request(&record, &api_key, &passphrase) {
-                return Err(StdError::GenericErr {
-                    msg: "Unauthorized. Bad API key or passphrase".to_string(),
-                    backtrace: None,
-                });
+                return Err(StdError::generic_err(
+                    "Unauthorized. Bad API key or passphrase",
+                ));
             }
 
-            let data_bytes = hex::decode(data).map_err(|_| StdError::GenericErr {
-                msg: "Error validating data format: should be hex string".to_string(),
-                backtrace: None,
+            let data_bytes = hex::decode(data).map_err(|_| {
+                StdError::generic_err("Error validating data format: should be hex string")
             })?;
 
             if !validate_data_len(&data_bytes) {
-                return Err(StdError::GenericErr {
-                    msg: "Error validating data size: Should be 64 characters".to_string(),
-                    backtrace: None,
-                });
+                return Err(StdError::generic_err(
+                    "Error validating data size: Should be 64 characters",
+                ));
             }
 
             let mut data_arr = [0u8; 32];
@@ -107,7 +104,7 @@ pub fn query<S: Storage, A: Api, Q: Querier>(
     _deps: &Extern<S, A, Q>,
     _msg: QueryMsg,
 ) -> StdResult<Binary> {
-    Err(StdError::generic_err("Queries are not supported yet:)"))
+    Err(StdError::generic_err("Queries are not supported yet :)"))
 }
 
 /////////////////////////////// Migrate ///////////////////////////////
@@ -120,9 +117,7 @@ pub fn migrate<S: Storage, A: Api, Q: Querier>(
     _env: Env,
     _msg: MigrateMsg,
 ) -> StdResult<MigrateResponse> {
-    Err(StdError::generic_err(
-        "You can only use this contract for migrations",
-    ))
+    Err(StdError::generic_err("You can not migrate this contract"))
 }
 
 #[cfg(test)]
